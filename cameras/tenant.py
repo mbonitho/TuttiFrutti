@@ -46,21 +46,19 @@ class Tenant(Entity):
             self.idle = True
 
 
-    def activate(self):
-        if self.idle:
-            self.setImage(self.img_activated)  
-            self.activated_time = pygame.time.get_ticks() 
-            self.idle = False
-
-
     def move(self, speed):
-        if self.direction.magnitude() != 0:
-            self.direction = self.direction.normalize()
-        self.rect.x += self.direction.x * speed
-        self.rotation_angle += self.rotation_direction
+        if self.canMove:
+            if self.direction.magnitude() != 0:
+                self.direction = self.direction.normalize()
+            self.rect.x += self.direction.x * speed
+            self.rotation_angle += self.rotation_direction
 
 
     def check_turn_around(self):
+
+        if not self.canMove:
+            return
+
         left = 0
         if self.rect.x < left:
            self.rect.x = left 
