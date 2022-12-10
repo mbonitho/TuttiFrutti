@@ -90,13 +90,13 @@ class GameState(State):
         self.camera_index += 1
         if self.camera_index >= len(self.cameras):
             self.camera_index = 0
-        print(self.camera_index)
 
     
     def call_police(self):
-        if self.can_call_cops:
+        current_camera = self.cameras[self.camera_index]
+        if self.can_call_cops and current_camera.tenant != None:
             self.can_call_cops = False
-            self.cameras[self.camera_index].addCop()
+            current_camera.addCop()
 
 
     def playerMove(self, direction):

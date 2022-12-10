@@ -14,7 +14,6 @@ class Stack():
 
 
     def pop(self):
-        print('Pop')
         return self.elements.pop()
 
 
@@ -32,7 +31,6 @@ class Stack():
 
 
     def push(self, item):
-        print(f'Push {item}')
         position_in_stack = len(self.elements) + 1
         self.elements.append((position_in_stack, item))
 
@@ -58,8 +56,6 @@ class TimedStack(Stack):
 
 
     def push(self, item):
-        print(f'Push - can push {item}? {pygame.time.get_ticks() - self.last_change_time > self.time}')
-        print(f'ticks: {pygame.time.get_ticks()} - chg_time: {self.last_change_time}. {pygame.time.get_ticks() - self.last_change_time} > {self.time}')
         if pygame.time.get_ticks() - self.last_change_time > self.time:
             super().push(item)
             self.last_change_time = pygame.time.get_ticks()
