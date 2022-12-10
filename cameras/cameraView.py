@@ -4,13 +4,13 @@ from cameras.tenant import Tenant
 
 class CameraView:
 
-    def __init__(self):
+    def __init__(self, tenant_type, room_name):
         
         self.display_surface = pygame.display.get_surface()
 
-        self.tenant = Tenant('locataire', (0,0)) # todo random
+        self.tenant = Tenant(tenant_type, (0,0)) # todo random
 
-        bg_image = pygame.image.load('./graphics/salon.png').convert_alpha() # todo random
+        bg_image = pygame.image.load(f'./graphics/rooms/{room_name}.png').convert_alpha() # todo random
         self.background = bg_image
 
         self.offset = (500,100)

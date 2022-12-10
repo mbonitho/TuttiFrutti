@@ -7,7 +7,7 @@ class Tenant(Entity):
     def __init__(self, type: str, pos: tuple):
         super().__init__()
 
-        image = pygame.image.load(f'./graphics/{type}.png').convert_alpha()
+        image = pygame.image.load(f'./graphics/tenants/{type}.png').convert_alpha()
         rect = image.get_rect()
         self.image = pygame.transform.scale(image, (int(rect.width * SCALE_FACTOR), int(rect.height * SCALE_FACTOR)))
         self.rect = self.image.get_rect(topleft = pos)

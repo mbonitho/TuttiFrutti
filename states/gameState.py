@@ -4,6 +4,7 @@ from entities.player.player import Player
 from states.state import State
 from utils.miscellaneous import is_near_enough
 from cameras.cameraView import CameraView
+from random import choice
 
 class GameState(State):
 
@@ -25,9 +26,16 @@ class GameState(State):
         self.cameras = []
         self.cameras_setup()
 
-    def cameras_setup(self):
+    def cameras_setup(self): # TESTER L'INCREMENTATION DES CAMERAS (DANS activatePlayer AVEC CAM_BUTTON_X)
+        rooms = ['cuisine', 'salon', 'chambre1', 'chambre2']
+        tenants = ['poire', 'cerise', 'clementine', 'datte']
         for i in range(NUMBER_OF_CAMERAS):
-            cv = CameraView()
+            tenant = choice(tenants)
+            tenants.remove(tenant)
+
+            room = choice(rooms)
+            rooms.remove(room)
+            cv = CameraView(tenant,room)
             self.cameras.append(cv)
 
 
@@ -44,10 +52,20 @@ class GameState(State):
             for location in [POLICE_BUTTON_X, CAM_BUTTON_X, PAPERS_X]:
 
                 if is_near_enough(location, self.player.rect.x, 50):
-                    print(location)
+
+                    if location == CAM_BUTTON_X:
+                        self.switch_cameras()
+
 
                     self.can_activate_selection = False
                     self.activation_time = pygame.time.get_ticks()
+
+
+    def switch_cameras(self):
+        self.camera_index += 1
+        if self.camera_index >= len(self.cameras):
+            self.camera_index = 0
+        print(self.camera_index)
 
 
     def playerMove(self, direction):
