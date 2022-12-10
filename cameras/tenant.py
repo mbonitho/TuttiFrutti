@@ -85,13 +85,10 @@ class Tenant(Entity):
         # skip frames
         if self.rotation_angle == 0:
             self.image = self.image_straight
-            # self.rect = self.image.get_rect()
         if self.rotation_angle == min:
             self.image = self.image_left
-            # self.rect = self.image.get_rect()
         if self.rotation_angle == max:
             self.image = self.image_right
-            # self.rect = self.image.get_rect()
 
 
     def update(self):

@@ -3,7 +3,7 @@ from settings import *
 from entities.player.player import Player
 from states.readLawsState import ReadLawsState
 from states.state import State
-from utils.miscellaneous import is_near_enough
+from utils.miscellaneous import is_near_enough, rotation_center
 from cameras.cameraView import CameraView
 from random import choice
 from theming.themedRect import ThemedRect
@@ -44,6 +44,21 @@ class GameState(State):
         self.time_gauge_rect = pygame.Rect(0, h * 0.1, 60, h * 0.8)
         self.time_gauge_rect.right = w - self.time_gauge_rect.width
 
+        # time cursor
+        reduction_factor = 0.3
+        self.cursor_rotation_direction = 1 # -1, 0, 1
+        self.cursor_rotation_angle = 0
+        img_time_cursor_straight = pygame.image.load(f'./graphics/tenants/poire.png').convert_alpha()
+        rect_time_cursor_straight = img_time_cursor_straight.get_rect()
+        self.img_time_cursor_straight = pygame.transform.scale(img_time_cursor_straight, (int(rect_time_cursor_straight.width * SCALE_FACTOR * reduction_factor), int(rect_time_cursor_straight.height * SCALE_FACTOR * reduction_factor)))
+        image_left, rect_left = rotation_center(img_time_cursor_straight, -7, rect_time_cursor_straight.centerx, rect_time_cursor_straight.bottom)
+        self.img_time_cursor_left = pygame.transform.scale(image_left, (int(rect_left.width * SCALE_FACTOR * reduction_factor), int(rect_left.height * SCALE_FACTOR * reduction_factor)))
+        image_right, rect_right = rotation_center(img_time_cursor_straight, 7, rect_time_cursor_straight.centerx, rect_time_cursor_straight.bottom)
+        self.img_time_cursor_right = pygame.transform.scale(image_right, (int(rect_right.width * SCALE_FACTOR * reduction_factor), int(rect_right.height * SCALE_FACTOR * reduction_factor)))
+        
+        self.img_time_cursor = self.img_time_cursor_straight
+        self.rect_time_cursor = self.img_time_cursor.get_rect(bottomleft= self.time_gauge_rect.bottomleft)
+
 
     def cameras_setup(self): # TESTER L'INCREMENTATION DES CAMERAS (DANS activatePlayer AVEC CAM_BUTTON_X)
         rooms = ['cuisine', 'salon', 'chambre1', 'chambre2']
@@ -56,6 +71,31 @@ class GameState(State):
             rooms.remove(room)
             cv = CameraView(tenant,room)
             self.cameras.append(cv)
+
+
+    def update_time_cursor_rotation(self):
+    
+        min = -22
+        if self.cursor_rotation_angle < min:
+            self.cursor_rotation_angle = min
+            self.cursor_rotation_angle *= -1
+
+        max = -min
+        if self.cursor_rotation_angle > max:
+            self.cursor_rotation_angle = max
+            self.cursor_rotation_angle *= -1
+
+        # skip frames
+        if self.cursor_rotation_angle == 0:
+            self.img_time_cursor = self.img_time_cursor_straight
+        if self.cursor_rotation_angle == min:
+            self.img_time_cursor = self.img_time_cursor_left
+        if self.cursor_rotation_angle == max:
+            self.img_time_cursor = self.img_time_cursor_right
+
+
+    def moveTimeCursor(self):
+        self.cursor_rotation_angle += self.cursor_rotation_direction
 
 
     def activation_cooldown(self):
@@ -153,6 +193,7 @@ class GameState(State):
 
         # draw time
         pygame.draw.rect(self.display_surface, TIME_GAUGE_COLOR, self.time_gauge_rect)
+        self.display_surface.blit(self.img_time_cursor , self.rect_time_cursor)
 
         # draw income
         income_text_surface = font.render(f'Jour {self.game.day_number} | {self.player.player_info.current_income}$', False, TEXT_COLOR)
@@ -164,11 +205,11 @@ class GameState(State):
         self.display_surface.blit(income_text_surface, income_text_rect)
 
 
-
-
     def run(self):
         self.draw()
         self.player.update()
         self.activation_cooldown()
         self.cops_cooldown()
         self.update_cameras_views()
+        self.moveTimeCursor()
+        self.update_time_cursor_rotation()
