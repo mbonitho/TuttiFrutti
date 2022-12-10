@@ -3,6 +3,7 @@ from settings import *
 from entities.player.player import Player
 from states.state import State
 from utils.miscellaneous import is_near_enough
+from cameras.cameraView import CameraView
 
 class GameState(State):
 
@@ -19,6 +20,15 @@ class GameState(State):
         self.activation_cooldown_time = 300
         self.activation_time = pygame.time.get_ticks() + 500
         self.can_activate_selection = False
+
+        self.camera_index = 0
+        self.cameras = []
+        self.cameras_setup()
+
+    def cameras_setup(self):
+        for i in range(NUMBER_OF_CAMERAS):
+            cv = CameraView()
+            self.cameras.append(cv)
 
 
     def activation_cooldown(self):
@@ -45,6 +55,11 @@ class GameState(State):
             self.player.rect.x += direction * PLAYER_SPEED
 
 
+    def update_cameras_views(self):
+        for cv in self.cameras:
+            cv.update()
+
+
     def input(self):
        
         keys = pygame.key.get_pressed()
@@ -62,6 +77,9 @@ class GameState(State):
 
 
     def draw(self):
+        # draw current camera view
+        self.cameras[self.camera_index].draw()
+
         # draw background
         self.display_surface.blit(self.background, (0,0))   
 
@@ -73,3 +91,4 @@ class GameState(State):
         self.draw()
         self.player.update()
         self.activation_cooldown()
+        self.update_cameras_views()
