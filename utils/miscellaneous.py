@@ -52,3 +52,6 @@ def get_distance_direction(checker, checked):
         
     return distance, direction
     
+
+def is_near_enough(target, number, margin):
+    return number >= target - margin and number <= target + margin

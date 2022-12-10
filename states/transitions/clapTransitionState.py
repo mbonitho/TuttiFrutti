@@ -7,6 +7,8 @@ class ClapTransitionState(TransitionState):
 
     def __init__(self, game, transition_mode, next_states = []):
         super().__init__(game, transition_mode, next_states)
+        self.transition_speed *= 5
+
 
 
     def draw(self):
