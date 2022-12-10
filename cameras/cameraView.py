@@ -8,9 +8,9 @@ class CameraView:
         
         self.display_surface = pygame.display.get_surface()
 
-        self.tenant = Tenant(tenant_type, (0,0)) # todo random
+        self.tenant = Tenant(tenant_type, (200,200))
 
-        bg_image = pygame.image.load(f'./graphics/rooms/{room_name}.png').convert_alpha() # todo random
+        bg_image = pygame.image.load(f'./graphics/rooms/{room_name}.png').convert_alpha() 
         self.background = bg_image
 
         self.offset = (500,100)
@@ -25,4 +25,4 @@ class CameraView:
 
 
     def update(self):
-        pass
+        self.tenant.update()
