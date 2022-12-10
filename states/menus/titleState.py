@@ -5,7 +5,7 @@ from states.gameState import GameState
 from states.menus.aboutState import AboutState
 from states.menus.selectableOptionsScreenState import SelectableOptionsScreenState
 from states.transitions.clapTransitionState import ClapTransitionState
-
+from states.text.textBoxState import TextBoxState
 
 class TitleState(SelectableOptionsScreenState):
 
@@ -24,6 +24,7 @@ class TitleState(SelectableOptionsScreenState):
             self.game.player_info = PlayerInfo() # reset player stats
             self.game.states.push(GameState(self.game))
             self.game.states.force_push(ClapTransitionState(self.game, TRANSITION_MODE_OUT))
+            self.game.states.force_push(TextBoxState(self.game, 'JOUR 1'))
 
 
     def openAbout(self):

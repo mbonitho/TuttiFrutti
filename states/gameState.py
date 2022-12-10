@@ -94,8 +94,35 @@ class GameState(State):
             self.img_time_cursor = self.img_time_cursor_right
 
 
-    def moveTimeCursor(self):
+    def check_moveTimeCursor(self):
+        now = pygame.time.get_ticks()
+
         self.cursor_rotation_angle += self.cursor_rotation_direction
+
+        # place cursor at right position
+        total = self.time_gauge_rect.height
+        hourly_increment = total / 12
+        self.rect_time_cursor.y = self.time_gauge_rect.bottom - (hourly_increment * (self.game.time_of_day + 1))
+
+        # increment time
+        if now - self.game.last_hour_change_time > HOUR_LENGTH:
+            self.game.time_of_day += 1 # todo max 12
+            self.game.last_hour_change_time = now
+
+
+    def check_endOfDay(self):
+        if self.game.time_of_day == 12:
+            self.game.increment_day()
+
+
+    def check_endOfGame(self):
+        if self.game.day_number == NUMBER_OF_DAYS + 1:
+            self.game.triggerEndGame()
+
+
+    def check_gameOver(self):
+        if self.game.player_info.current_income == 0:
+            self.game.triggerEndGame()
 
 
     def activation_cooldown(self):
@@ -196,7 +223,7 @@ class GameState(State):
         self.display_surface.blit(self.img_time_cursor , self.rect_time_cursor)
 
         # draw income
-        income_text_surface = font.render(f'Jour {self.game.day_number} | {self.player.player_info.current_income}$', False, TEXT_COLOR)
+        income_text_surface = font.render(f'Jour {self.game.day_number} | {self.game.player_info.current_income}$', False, TEXT_COLOR)
         income_text_rect = income_text_surface.get_rect(bottomright=(self.display_surface.get_width() - UI_FONT_SIZE * SCALE_FACTOR * 0.25, self.display_surface.get_height() - UI_FONT_SIZE * SCALE_FACTOR * 0.25))
         income_box_rect = pygame.rect.Rect(income_text_rect.inflate(UI_FONT_SIZE * SCALE_FACTOR * 0.25, 0))
         income_box_rect.midtop = income_text_rect.midtop
@@ -211,5 +238,7 @@ class GameState(State):
         self.activation_cooldown()
         self.cops_cooldown()
         self.update_cameras_views()
-        self.moveTimeCursor()
+        self.check_moveTimeCursor()
         self.update_time_cursor_rotation()
+        self.check_endOfDay()
+        self.check_endOfGame()

@@ -17,9 +17,6 @@ class Player(Entity):
         # movement
         self.canMove = True
 
-        # stats
-        self.player_info = PlayerInfo()
-
         # status
         self.activation_cooldown_time = 600
         self.activated_time = pygame.time.get_ticks() - self.activation_cooldown_time * 2

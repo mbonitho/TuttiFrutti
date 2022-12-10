@@ -1,18 +1,16 @@
 import pygame
-from config.settings import *
+from settings import *
 from sprites.cursor import Cursor
 from states.state import State
 from theming.themedRect import ThemedRect
-from utils.mockJoystick import MockJoystick
-
 
 class TextBoxState(State):
 
-    def __init__(self, game, npc):
+    def __init__(self, game, message, next_states = []):
         
         super().__init__(game)
 
-        self.npc = npc
+        self.message = message
 
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE * SCALE_FACTOR)
         
@@ -26,7 +24,7 @@ class TextBoxState(State):
         self.can_advance_text = True
 
         # General setup
-        self.lines = self.get_lines(npc.event_tree.str_message)
+        self.lines = self.get_lines(message)
 
         # dimensions
         screen_width = pygame.display.get_surface().get_width()
@@ -40,6 +38,8 @@ class TextBoxState(State):
         # Cursor
         self.cursor = Cursor()
         self.cursor.rect.bottomright = rect.bottomright
+
+        self.next_states = next_states
 
 
     def get_lines(self, text):
@@ -77,6 +77,8 @@ class TextBoxState(State):
                 self.current_letter_index = 0
             else:
                 self.game.states.pop()
+                for state in self.next_states:
+                    self.game.states.force_push(state)
 
 
     def advance_text_cooldown(self):
@@ -86,34 +88,8 @@ class TextBoxState(State):
 
     def input(self):
         keys = pygame.key.get_pressed()
-        joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
-
-        # obtain first player joystick, or dummy joystick if none is connected
-        j = pygame.joystick.Joystick(0) if (len(joysticks) > 0) else MockJoystick()
-        hat = j.get_hat(0)
-        axisLR = j.get_axis(0)
-        axisUD = j.get_axis(1)
-
-        # player movement input
-        if hat[0] == -1 or axisLR < -0.5 or keys[pygame.K_LEFT]: #left
-            pass
-        elif hat[0] == 1 or axisLR > 0.5 or keys[pygame.K_RIGHT]: #right
-            pass
-        else:
-            pass
-        if hat[1] == 1 or axisUD < -0.5 or keys[pygame.K_UP]: #up
-            pass
-        elif hat[1] == -1 or axisUD > 0.5 or keys[pygame.K_DOWN]: #down
-            pass
-        else:
-            pass
-            
         # menu, ok, cancel 
-        if j.get_button(self.game.controller_map.controls['MENU']) or keys[pygame.K_e]:
-            self.advance_text()
-        elif j.get_button(self.game.controller_map.controls['OK']) or keys[pygame.K_SPACE]:
-            self.advance_text() 
-        elif j.get_button(self.game.controller_map.controls['CANCEL']) or keys[pygame.K_RETURN]:
+        if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
             self.advance_text() 
 
 

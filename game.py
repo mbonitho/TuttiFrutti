@@ -2,6 +2,7 @@ import pygame, sys
 from settings import *
 from entities.player.playerInfo import PlayerInfo
 from states.menus.titleState import TitleState
+from states.text.textBoxState import TextBoxState
 from utils.stack import TimedStack
 from laws.law import Law
 from random import choice
@@ -25,6 +26,9 @@ class Game:
 
         self.day_number = 1
         self.current_laws = []
+        self.time_of_day = 0
+        self.last_hour_change_time = pygame.time.get_ticks()
+
 
         # get all laws
         self.all_laws = self.get_laws()
@@ -32,6 +36,37 @@ class Game:
         # temp : add 3 laws
         for i in range(3):
             self.addRandomLaw()
+
+
+    def resetGame(self):
+        self.day_number = 1
+        self.current_laws = []
+        self.time_of_day = 0
+        self.last_hour_change_time = pygame.time.get_ticks()
+        self.player_info = PlayerInfo()
+
+
+    def increment_day(self):
+        self.day_number += 1
+        self.time_of_day = 0
+        self.last_hour_change_time = pygame.time.get_ticks()
+        if self.day_number <= NUMBER_OF_DAYS:
+            self.states.force_push(TextBoxState(self, f'JOUR {self.day_number}'))   
+        self.player_info.total_income += self.player_info.current_income
+        self.player_info.current_income = self.player_info.base_daily_income
+
+
+    def triggerEndGame(self):
+        st1 = TitleState(self)
+        st1.activation_time = pygame.time.get_ticks() + 5000
+        self.states.force_push(TextBoxState(self, f'Félicitations! Votre semaine de travail est terminée. Voici votre salaire : {self.player_info.total_income}$', [st1])) 
+        self.resetGame()
+
+
+    def triggerGameOver(self):
+        st1 = TitleState(self)
+        self.states.force_push(TextBoxState(self, f'Vous avez déshonnoré Blédor, notre leader suprême. Lorsque vous sortirez du camp de réinsertion sociale, essayez de grader votre emploi plus de {self.day_number} jours!', [st1])) 
+        self.resetGame()
 
 
     def current_state(self):
