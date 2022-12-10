@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from entities.player.player import Player
+from states.readLawsState import ReadLawsState
 from states.state import State
 from utils.miscellaneous import is_near_enough
 from cameras.cameraView import CameraView
@@ -31,13 +32,9 @@ class GameState(State):
         self.cops_call_time = pygame.time.get_ticks() - 10000
         self.can_call_cops = False
 
-        self.laws = []
-
-
-        # income
+        # display day & income
         h = self.display_surface.get_height()
         w = self.display_surface.get_width()
-        self.day_number = 1
         self.income_height = h * 0.1
         self.income_width = w * 0.1
         rect = pygame.Rect(w * .9, h * .9, self.income_width, self.income_height)
@@ -82,6 +79,9 @@ class GameState(State):
                     elif location == POLICE_BUTTON_X:
                         self.call_police()
 
+                    elif location == PAPERS_X:
+                        self.look_at_laws()
+
                     self.can_activate_selection = False
                     self.activation_time = pygame.time.get_ticks()
 
@@ -97,6 +97,10 @@ class GameState(State):
         if self.can_call_cops and current_camera.tenant != None:
             self.can_call_cops = False
             current_camera.addCop()
+
+
+    def look_at_laws(self):
+        self.game.states.push(ReadLawsState(self.game))
 
 
     def playerMove(self, direction):
@@ -137,7 +141,7 @@ class GameState(State):
 
         # draw income
         font = pygame.font.Font(UI_FONT, UI_FONT_SIZE  * SCALE_FACTOR)
-        income_text_surface = font.render(f'Jour {self.day_number} | {self.player.player_info.current_income}$', False, TEXT_COLOR)
+        income_text_surface = font.render(f'Jour {self.game.day_number} | {self.player.player_info.current_income}$', False, TEXT_COLOR)
         income_text_rect = income_text_surface.get_rect(bottomright=(self.display_surface.get_width() - UI_FONT_SIZE * SCALE_FACTOR * 0.25, self.display_surface.get_height() - UI_FONT_SIZE * SCALE_FACTOR * 0.25))
         income_box_rect = pygame.rect.Rect(income_text_rect.inflate(UI_FONT_SIZE * SCALE_FACTOR * 0.25, 0))
         income_box_rect.midtop = income_text_rect.midtop

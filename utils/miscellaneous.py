@@ -58,8 +58,12 @@ def is_near_enough(target, number, margin):
 
 
 def rotation_center(image, angle, x, y):
-    
     rotated_image = pygame.transform.rotate(image, angle)
     new_rect = rotated_image.get_rect(center = image.get_rect(center = (x, y)).center)
-
     return rotated_image, new_rect
+
+
+def draw_rect_alpha(surface, color, rect):
+    shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+    pygame.draw.rect(shape_surf, color, shape_surf.get_rect())
+    surface.blit(shape_surf, rect)
