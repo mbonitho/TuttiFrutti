@@ -104,7 +104,7 @@ class Game:
         laws.append(Law(code=LAW_NO_OPENED_WINDOW, name='Respect mutuel', description='Les fenêtres doivent rester fermées.'))
         laws.append(Law(code=LAW_NO_VISIT_OTHER_SPECIES, name='Uniformité', description='Les visites des autres sortes de fruits sont interdites.'))
         laws.append(Law(code=LAW_NO_VISIT_SAME_SPECIES, name='Divergence', description='Les visites de la même sorte de fruits sont interdites.'))
-        laws.append(Law(code=LAW_STOP_TO_PRAISE_LEADER_AT_NOON, name='Révérence', description='Les fruits doivent s\'arrêter à midi pour vénérer le leader.'))
+        laws.append(Law(code=LAW_DONT_STOP_MOVING, name='Volontaire', description='Il est interdit de s\'immobiliser'))
         return laws
 
 

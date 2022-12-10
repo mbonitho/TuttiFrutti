@@ -1,11 +1,12 @@
 import pygame
 from settings import *
 from entities.player.player import Player
+from states.text.textBoxState import TextBoxState
 from states.readLawsState import ReadLawsState
 from states.state import State
 from utils.miscellaneous import is_near_enough, rotation_center
 from cameras.cameraView import CameraView
-from random import choice
+from random import choice, random, randint
 from theming.themedRect import ThemedRect
 
 class GameState(State):
@@ -69,7 +70,7 @@ class GameState(State):
 
             room = choice(rooms)
             rooms.remove(room)
-            cv = CameraView(tenant,room)
+            cv = CameraView(tenant,room, self.get_arrestation_consequences)
             self.cameras.append(cv)
 
 
@@ -95,7 +96,6 @@ class GameState(State):
 
 
     def check_moveTimeCursor(self):
-        now = pygame.time.get_ticks()
 
         self.cursor_rotation_angle += self.cursor_rotation_direction
 
@@ -104,10 +104,23 @@ class GameState(State):
         hourly_increment = total / 12
         self.rect_time_cursor.y = self.time_gauge_rect.bottom - (hourly_increment * (self.game.time_of_day + 1))
 
-        # increment time
+
+    def check_incrementTime(self):
+        now = pygame.time.get_ticks()
         if now - self.game.last_hour_change_time > HOUR_LENGTH:
-            self.game.time_of_day += 1 # todo max 12
+            self.game.time_of_day += 1
             self.game.last_hour_change_time = now
+
+            # 50% probability of infraction each hour
+            if random() < INFRACTION_PROBABILITY:
+                
+                law = choice(self.game.current_laws)
+                cameraview = choice(self.cameras)
+                time_of_infraction = randint(0, HOUR_LENGTH)
+
+                cameraview.setBadBehavior(law.code, time_of_infraction)
+
+                print(f'{law.description} - {cameraview.tenant.name}')
 
 
     def check_endOfDay(self):
@@ -121,7 +134,7 @@ class GameState(State):
 
 
     def check_gameOver(self):
-        if self.game.player_info.current_income == 0:
+        if self.game.player_info.current_income <= 0:
             self.game.triggerEndGame()
 
 
@@ -155,6 +168,22 @@ class GameState(State):
 
                     self.can_activate_selection = False
                     self.activation_time = pygame.time.get_ticks()
+
+
+    def get_arrestation_consequences(self, is_illegal):
+        msg = ''
+        if is_illegal:
+            msg = 'Beau travail, camarade.'
+            self.game.player_info.current_income += GOOD_ARREST_BONUS
+        else:
+            msg = 'Vous avez fait arrêter un innocent...'
+            self.game.player_info.current_income -= BAD_ARREST_PENALTY
+
+        self.game.states.push(TextBoxState(self.game, msg))
+        self.can_activate_selection = False
+        self.activation_time = pygame.time.get_ticks() + 2000
+        self.can_call_cops = False
+        self.cops_call_time = pygame.time.get_ticks() + 2000
 
 
     def switch_cameras(self):
@@ -239,6 +268,8 @@ class GameState(State):
         self.cops_cooldown()
         self.update_cameras_views()
         self.check_moveTimeCursor()
+        self.check_incrementTime()
         self.update_time_cursor_rotation()
         self.check_endOfDay()
         self.check_endOfGame()
+        self.check_gameOver()
