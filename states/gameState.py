@@ -40,6 +40,10 @@ class GameState(State):
         rect = pygame.Rect(w * .9, h * .9, self.income_width, self.income_height)
         self.income_box_rect = ThemedRect(rect)
 
+        # time gauge
+        self.time_gauge_rect = pygame.Rect(0, h * 0.1, 60, h * 0.8)
+        self.time_gauge_rect.right = w - self.time_gauge_rect.width
+
 
     def cameras_setup(self): # TESTER L'INCREMENTATION DES CAMERAS (DANS activatePlayer AVEC CAM_BUTTON_X)
         rooms = ['cuisine', 'salon', 'chambre1', 'chambre2']
@@ -130,17 +134,27 @@ class GameState(State):
 
 
     def draw(self):
+        
+        font = pygame.font.Font(UI_FONT, UI_FONT_SIZE  * SCALE_FACTOR)
+        
         # draw current camera view
         self.cameras[self.camera_index].draw()
 
         # draw background
-        self.display_surface.blit(self.background, (0,0))   
+        self.display_surface.blit(self.background, (0,0)) 
+
+        # display cam number
+        cam_no_text_surface = font.render(f'#{self.camera_index+1}', False, CAM_NO_TEXT_COLOR)
+        cam_no_text_rect = cam_no_text_surface.get_rect(topright=(450, 100))
+        self.display_surface.blit(cam_no_text_surface, cam_no_text_rect)
 
         # draw player
         self.display_surface.blit(self.player.image, (self.player.rect.x, self.player.rect.y))
 
+        # draw time
+        pygame.draw.rect(self.display_surface, TIME_GAUGE_COLOR, self.time_gauge_rect)
+
         # draw income
-        font = pygame.font.Font(UI_FONT, UI_FONT_SIZE  * SCALE_FACTOR)
         income_text_surface = font.render(f'Jour {self.game.day_number} | {self.player.player_info.current_income}$', False, TEXT_COLOR)
         income_text_rect = income_text_surface.get_rect(bottomright=(self.display_surface.get_width() - UI_FONT_SIZE * SCALE_FACTOR * 0.25, self.display_surface.get_height() - UI_FONT_SIZE * SCALE_FACTOR * 0.25))
         income_box_rect = pygame.rect.Rect(income_text_rect.inflate(UI_FONT_SIZE * SCALE_FACTOR * 0.25, 0))
@@ -148,6 +162,8 @@ class GameState(State):
         self.income_box_rect.update_rect(income_box_rect)
         self.income_box_rect.draw()
         self.display_surface.blit(income_text_surface, income_text_rect)
+
+
 
 
     def run(self):
