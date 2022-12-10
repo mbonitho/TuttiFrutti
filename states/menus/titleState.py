@@ -24,7 +24,7 @@ class TitleState(SelectableOptionsScreenState):
             self.game.player_info = PlayerInfo() # reset player stats
             self.game.states.push(GameState(self.game))
             self.game.states.force_push(ClapTransitionState(self.game, TRANSITION_MODE_OUT))
-            self.game.states.force_push(TextBoxState(self.game, 'JOUR 1'))
+            self.game.increment_day()
 
 
     def openAbout(self):

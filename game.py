@@ -18,28 +18,23 @@ class Game:
         pygame.display.set_caption('Tutti Frutti')
         self.clock = pygame.time.Clock()
 
+        # get all laws
+        self.all_laws = self.get_laws()
+
         # player stats
         self.player_info = PlayerInfo() 
 
         self.states = TimedStack()
         self.states.push(TitleState(self))
 
-        self.day_number = 1
+        self.day_number = 0
         self.current_laws = []
         self.time_of_day = 0
-        self.last_hour_change_time = pygame.time.get_ticks()
-
-
-        # get all laws
-        self.all_laws = self.get_laws()
-
-        # temp : add 3 laws
-        for i in range(3):
-            self.addRandomLaw()
+        self.last_hour_change_time = None
 
 
     def resetGame(self):
-        self.day_number = 1
+        self.day_number = 0
         self.current_laws = []
         self.time_of_day = 0
         self.last_hour_change_time = pygame.time.get_ticks()
@@ -54,6 +49,9 @@ class Game:
             self.states.force_push(TextBoxState(self, f'JOUR {self.day_number}'))   
         self.player_info.total_income += self.player_info.current_income
         self.player_info.current_income = self.player_info.base_daily_income
+
+        nb = 2 if self.day_number < 2 else self.day_number
+        self.modifyLaws(nb)
 
 
     def triggerEndGame(self):
@@ -110,13 +108,21 @@ class Game:
         return laws
 
 
-    def addRandomLaw(self):
-        found = False
-        random_law = None
-        while not found:
-            random_law = choice(self.all_laws)
-            found = random_law.code not in [x.code for x in self.current_laws]
-        self.current_laws.append(random_law)
+    def modifyLaws(self, number):
+
+        # remove a law
+        if len(self.current_laws) > 0:
+            random_law = choice(self.current_laws)
+            self.current_laws.remove(random_law)
+
+        # add a law
+        while len(self.current_laws) < number:
+            found = False
+            random_law = None
+            while not found:
+                random_law = choice(self.all_laws)
+                found = random_law.code not in [x.code for x in self.current_laws]
+            self.current_laws.append(random_law)
 
 
 if __name__ == '__main__':
