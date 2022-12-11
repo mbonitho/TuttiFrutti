@@ -29,7 +29,7 @@ class CameraView:
         self.curtains_closed_image = pygame.image.load(f'./graphics/rooms/rideaux_fermes.png').convert_alpha() 
         self.curtains_closed_rect = self.curtains_open_image.get_rect(topleft= (100,0)) 
 
-        self.offset = (175,70)
+        self.offset = (275,70)
 
         self.cop = None
 

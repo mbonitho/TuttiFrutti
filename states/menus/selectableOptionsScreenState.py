@@ -92,7 +92,7 @@ class SelectableOptionsScreenState(State):
 
 
     def draw(self):
-        self.display_surface.fill('gray')
+        # self.display_surface.fill('gray')
 
         # Themed box around options
         if self.has_themed_box:

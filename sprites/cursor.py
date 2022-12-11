@@ -9,7 +9,7 @@ class Cursor(pygame.sprite.Sprite):
 
         self.animation = self.import_animation(flipped)
         self.frame_index = 0
-        self.animation_speed = 0.30
+        self.animation_speed = 0.10
         self.image = self.animation[0]
         self.rect = self.image.get_rect()
 

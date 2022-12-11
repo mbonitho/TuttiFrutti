@@ -280,12 +280,12 @@ class GameState(State):
         # draw background
         self.display_surface.blit(self.background, (0,0)) 
         self.display_surface.blit(self.panel_image, (200,500))
-        self.display_surface.blit(self.btn_police, (250,520))
-        self.display_surface.blit(self.btn_switch_cam, (450,520))
+        self.display_surface.blit(self.btn_police, (250,550))
+        self.display_surface.blit(self.btn_switch_cam, (450,550))
 
         # display cam number
         cam_no_text_surface = font.render(f'#{self.camera_index+1}', True, CAM_NO_TEXT_COLOR)
-        cam_no_text_rect = cam_no_text_surface.get_rect(topright=(250, 80))
+        cam_no_text_rect = cam_no_text_surface.get_rect(topright=(330, 80))
         self.display_surface.blit(cam_no_text_surface, cam_no_text_rect)
 
         # draw player

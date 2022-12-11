@@ -36,7 +36,11 @@ class ReadOpeningLetterState(State):
             "",
             "Bon courage, et que Blédor vous guide.",
             "",
-            "Roff, gentil garant du quartier #159A"
+            "Roff, gentil garant du quartier #159A",
+            "",
+            "",
+            "(Appuyez sur espace pour commencer...)"
+
         ]
 
         self.next_states = next_states

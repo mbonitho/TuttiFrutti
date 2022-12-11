@@ -20,6 +20,9 @@ class TitleState(SelectableOptionsScreenState):
                         'À propos' : self.openAbout,
                         'Quitter' : self.close}
 
+        bg_image = pygame.image.load('./graphics/titre.png').convert_alpha()
+        self.background = bg_image
+        
 
     def playMusic(self):
         # Menu music
@@ -50,11 +53,9 @@ class TitleState(SelectableOptionsScreenState):
 
 
     def draw(self):
+
+        # draw background
+        self.display_surface.blit(self.background, (0,0)) 
+
         # options
         super().draw()
-
-        # title text
-        title_txt_surface = self.font.render('TUTTI FRUTTI', True, TEXT_COLOR)
-        title_rect = title_txt_surface.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0,HEIGHT * .25))
-        self.display_surface.blit(title_txt_surface, title_rect)
-    
