@@ -89,6 +89,10 @@ class CameraView:
         # draw background
         self.display_surface.blit(self.background, self.offset)   
 
+        # draw visitors
+        for visitor in self.visitors:
+            self.display_surface.blit(visitor.image, (visitor.rect.x + self.offset[0], visitor.rect.y + self.offset[1]))
+
         # draw tenant
         if self.tenant != None:
             self.display_surface.blit(self.tenant.image, (self.tenant.rect.x + self.offset[0], self.tenant.rect.y + self.offset[1]))
@@ -99,7 +103,7 @@ class CameraView:
 
         # music if necessary
         if self.status == 'singing':
-            self.display_surface.blit(self.tenant.image_music_note, (self.tenant.rect.x + self.offset[0] + 32 * self.tenant.direction, self.tenant.rect.top + self.offset[1]))
+            self.display_surface.blit(self.tenant.image_music_note, (self.tenant.rect.x + self.offset[0] + 32 * self.tenant.direction[0], self.tenant.rect.top + self.offset[1]))
 
         # draw cop if necessary
         if self.cop != None:
@@ -119,6 +123,9 @@ class CameraView:
                 self.tenant.speed = 1
 
             self.tenant.update()
+
+            for visitor in self.visitors:
+                visitor.update()
 
         if self.cop != None:
             self.cop.update()

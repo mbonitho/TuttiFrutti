@@ -111,7 +111,7 @@ class GameState(State):
             self.game.time_of_day += 1
             self.game.last_hour_change_time = now
 
-            # 50% probability of infraction each hour
+            # 90% probability of infraction each hour
             if random() < INFRACTION_PROBABILITY:
                 
                 law = choice(self.game.current_laws)
