@@ -36,6 +36,10 @@ class Game:
         self.time_of_day = 0
         self.last_hour_change_time = None
 
+        # sound effects
+        self.endgame_loss_sfx = pygame.mixer.Sound("./sound/sfx/endgame_loss.wav")
+        self.endgame_success_sfx = pygame.mixer.Sound("./sound/sfx/endgame_success.wav")
+
 
     def resetGame(self):
         self.day_number = 0
@@ -63,12 +67,16 @@ class Game:
 
 
     def triggerEndGame(self):
+        pygame.mixer.Sound.play(self.endgame_success_sfx)
+        pygame.mixer.music.stop()
         st1 = TitleState(self)
         self.states.force_push(TextBoxState(self, f'Félicitations! Votre semaine de travail est terminée. Voici votre salaire : {self.player_info.total_income}$', [st1])) 
         self.resetGame()
 
 
     def triggerGameOver(self):
+        pygame.mixer.Sound.play(self.endgame_success_sfx)
+        pygame.mixer.music.stop()
         st1 = TitleState(self)
         self.states.force_push(TextBoxState(self, f'Vous avez déshonnoré Blédor, notre leader suprême. Lorsque vous sortirez du camp de réinsertion sociale, essayez de garder votre emploi plus de {self.day_number} jours!', [st1])) 
         self.resetGame()

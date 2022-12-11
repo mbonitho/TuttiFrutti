@@ -66,6 +66,10 @@ class GameState(State):
         self.img_time_cursor = self.img_time_cursor_straight
         self.rect_time_cursor = self.img_time_cursor.get_rect(bottomleft= self.time_gauge_rect.bottomleft)
 
+        # sound effects
+        self.bad_arrest_sfx = pygame.mixer.Sound("./sound/sfx/bad_arrest.wav")
+        self.good_arrest_sfx = pygame.mixer.Sound("./sound/sfx/good_arrest.wav")
+
 
     def cameras_setup(self): # TESTER L'INCREMENTATION DES CAMERAS (DANS activatePlayer AVEC CAM_BUTTON_X)
         rooms = CameraView.room_types.copy()
@@ -143,9 +147,6 @@ class GameState(State):
             print(f'INNOCENT - {law.description} - {cameraview.tenant.name}')
 
 
-
-
-
     def check_endOfDay(self):
         if self.game.time_of_day == HOURS_IN_DAY:
             self.game.increment_day()
@@ -204,9 +205,13 @@ class GameState(State):
         if is_illegal:
             msg = 'Beau travail, camarade.'
             self.game.player_info.current_income += GOOD_ARREST_BONUS
+            pygame.mixer.Sound.play(self.good_arrest_sfx)
+            pygame.mixer.music.stop()
         else:
             msg = 'Vous avez fait arrêter un innocent...'
             self.game.player_info.current_income -= BAD_ARREST_PENALTY
+            pygame.mixer.Sound.play(self.bad_arrest_sfx)
+            pygame.mixer.music.stop()
         self.game.states.push(TextBoxState(self.game, msg))
 
 

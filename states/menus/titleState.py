@@ -21,8 +21,15 @@ class TitleState(SelectableOptionsScreenState):
                         'Quitter' : self.close}
 
 
+    def playMusic(self):
+        # Menu music
+        pygame.mixer.music.load('./sound/bgm/title.wav')
+        pygame.mixer.music.play(-1)
+
+
     def newGame(self):
         if self.can_activate_selection:
+            pygame.mixer.music.stop()
             self.game.player_info = PlayerInfo() # reset player stats
             self.game.states.push(GameState(self.game))
             self.game.states.force_push(ClapTransitionState(self.game, TRANSITION_MODE_OUT))
