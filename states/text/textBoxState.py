@@ -12,7 +12,7 @@ class TextBoxState(State):
 
         self.message = message
 
-        self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE * SCALE_FACTOR)
+        self.font = pygame.font.Font(UI_FONT, int(UI_FONT_SIZE * SCALE_FACTOR))
         
         self.current_letter_index = 0
         self.text_speed = TEXT_SPEED

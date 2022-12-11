@@ -14,7 +14,7 @@ class Game:
         # general setup
         pygame.init()
         pygame.mouse.set_visible(False)
-        self.screen = pygame.display.set_mode((WIDTH * SCALE_FACTOR, HEIGHT * SCALE_FACTOR))#, pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((WIDTH * SCALE_FACTOR, HEIGHT * SCALE_FACTOR)) #, pygame.FULLSCREEN|pygame.SCALED)
         pygame.display.set_caption('Tutti Frutti')
         self.clock = pygame.time.Clock()
 
@@ -50,7 +50,7 @@ class Game:
         self.player_info.total_income += self.player_info.current_income
         self.player_info.current_income = self.player_info.base_daily_income
 
-        nb = 2 if self.day_number < 2 else 4
+        nb = 4 if self.day_number < 5 else 5
         self.modifyLaws(nb)
 
 

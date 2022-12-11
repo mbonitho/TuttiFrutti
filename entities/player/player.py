@@ -1,5 +1,4 @@
 import pygame
-from entities.player.playerInfo import PlayerInfo
 from entities.entity import Entity
 from settings import *
 
@@ -8,8 +7,8 @@ class Player(Entity):
     def __init__(self, pos: tuple):
         super().__init__()
 
-        self.img_idle = './graphics/heros.png'
-        self.img_activated = './graphics/heros_bras_leve.png'
+        self.img_idle = './graphics/piff.png'
+        self.img_activated = './graphics/piff_bras_leve.png'
 
         self.setImage(self.img_idle)
         self.rect = self.image.get_rect(topleft = pos)
@@ -41,6 +40,7 @@ class Player(Entity):
             self.setImage(self.img_activated)  
             self.activated_time = pygame.time.get_ticks() 
             self.idle = False
+        print(self.rect.x)
 
 
     def update(self):

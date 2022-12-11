@@ -15,10 +15,16 @@ class GameState(State):
 
         super().__init__(game)
 
-        self.player = Player((WIDTH / 2, HEIGHT - 400))
+        self.player = Player((WIDTH / 2, HEIGHT * 0.6))
 
-        bg_image = pygame.image.load('./graphics/poste_surveillance.png').convert_alpha()
+        bg_image = pygame.image.load('./graphics/bureau/bureau.png').convert_alpha()
         self.background = bg_image
+        panel_image = pygame.image.load('./graphics/bureau/panneau_boutons.png').convert_alpha()
+        self.panel_image = panel_image
+        btn_switch_cam = pygame.image.load('./graphics/bureau/bouton_cam.png').convert_alpha()
+        self.btn_switch_cam = btn_switch_cam
+        btn_police = pygame.image.load('./graphics/bureau/bouton_police.png').convert_alpha()
+        self.btn_police = btn_police
 
         # activation system
         self.activation_cooldown_time = 300
@@ -43,13 +49,13 @@ class GameState(State):
 
         # time gauge
         self.time_gauge_rect = pygame.Rect(0, h * 0.1, 60, h * 0.8)
-        self.time_gauge_rect.right = w - self.time_gauge_rect.width
+        self.time_gauge_rect.left = self.time_gauge_rect.width
 
         # time cursor
         reduction_factor = 0.3
         self.cursor_rotation_direction = 1 # -1, 0, 1
         self.cursor_rotation_angle = 0
-        img_time_cursor_straight = pygame.image.load(f'./graphics/tenants/poire.png').convert_alpha()
+        img_time_cursor_straight = pygame.image.load(f'./graphics/tenants/{choice(CameraView.tenant_types)}.png').convert_alpha()
         rect_time_cursor_straight = img_time_cursor_straight.get_rect()
         self.img_time_cursor_straight = pygame.transform.scale(img_time_cursor_straight, (int(rect_time_cursor_straight.width * SCALE_FACTOR * reduction_factor), int(rect_time_cursor_straight.height * SCALE_FACTOR * reduction_factor)))
         image_left, rect_left = rotation_center(img_time_cursor_straight, -7, rect_time_cursor_straight.centerx, rect_time_cursor_straight.bottom)
@@ -62,8 +68,8 @@ class GameState(State):
 
 
     def cameras_setup(self): # TESTER L'INCREMENTATION DES CAMERAS (DANS activatePlayer AVEC CAM_BUTTON_X)
-        rooms = ['cuisine', 'salon', 'chambre1', 'chambre2']
-        tenants = ['poire', 'cerise', 'clementine', 'datte']
+        rooms = CameraView.room_types.copy()
+        tenants = CameraView.tenant_types.copy()
         for i in range(NUMBER_OF_CAMERAS):
             tenant = choice(tenants)
             tenants.remove(tenant)
@@ -114,8 +120,13 @@ class GameState(State):
             # 90% probability of infraction each hour
             if random() < INFRACTION_PROBABILITY:
                 
+                cams = []
+                for c in self.cameras:
+                    if c.tenant != None and c.status != 'cop':
+                        cams.append(c)
+
                 law = choice(self.game.current_laws)
-                cameraview = choice(self.cameras)
+                cameraview = choice(cams)
                 time_of_infraction = randint(0, HOUR_LENGTH)
 
                 cameraview.setBadBehavior(law.code, time_of_infraction)
@@ -230,17 +241,20 @@ class GameState(State):
 
     def draw(self):
         
-        font = pygame.font.Font(UI_FONT, UI_FONT_SIZE  * SCALE_FACTOR)
+        font = pygame.font.Font(UI_FONT, int(UI_FONT_SIZE  * SCALE_FACTOR))
         
         # draw current camera view
         self.cameras[self.camera_index].draw()
 
         # draw background
         self.display_surface.blit(self.background, (0,0)) 
+        self.display_surface.blit(self.panel_image, (200,500))
+        self.display_surface.blit(self.btn_police, (250,520))
+        self.display_surface.blit(self.btn_switch_cam, (450,520))
 
         # display cam number
         cam_no_text_surface = font.render(f'#{self.camera_index+1}', False, CAM_NO_TEXT_COLOR)
-        cam_no_text_rect = cam_no_text_surface.get_rect(topright=(450, 100))
+        cam_no_text_rect = cam_no_text_surface.get_rect(topright=(250, 80))
         self.display_surface.blit(cam_no_text_surface, cam_no_text_rect)
 
         # draw player

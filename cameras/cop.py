@@ -5,10 +5,10 @@ from utils.miscellaneous import rotation_center
 
 class Cop(Entity):
 
-    def __init__(self, type: str, cameraView):
+    def __init__(self, cameraView):
         super().__init__()
 
-        image_straight = pygame.image.load(f'./graphics/{type}.png').convert_alpha()
+        image_straight = pygame.image.load(f'./graphics/riff.png').convert_alpha()
         rect_straight = image_straight.get_rect()
         self.image_straight = pygame.transform.scale(image_straight, (int(rect_straight.width * SCALE_FACTOR), int(rect_straight.height * SCALE_FACTOR)))
 
@@ -19,7 +19,7 @@ class Cop(Entity):
         self.image_right = pygame.transform.scale(image_right, (int(rect_right.width * SCALE_FACTOR), int(rect_right.height * SCALE_FACTOR)))
 
         self.image = self.image_straight
-        self.rect = self.image.get_rect(topleft = (600,0))
+        self.rect = self.image.get_rect(topleft = (600,cameraView.tenant.rect.y))
 
         # tenant
         self.cameraView = cameraView
@@ -64,10 +64,6 @@ class Cop(Entity):
         if self.moveTenant:
             self.cameraView.tenant.rect.x += self.direction.x * speed
             self.cameraView.tenant.rotation_angle += self.rotation_direction
-
-            if self.cameraView.tenant.rect.x > 800:
-                self.cameraView.tenant = None
-                self.cameraView.cop = None
 
 
     def check_turn_around(self):

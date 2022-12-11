@@ -6,10 +6,11 @@ from random import choice, randint
 
 class CameraView:
 
-    tenant_types = ['cerise', 'clementine', 'datte', 'poire']
+    room_types = ['salon1', 'salon2', 'salon3', 'salon4']
+    tenant_types = ['ben', 'clement', 'tommy', 'ted', 'paula', 'peach']
 
     TENANT_STARTX = 200
-    TENANT_STARTY = 200
+    TENANT_STARTY = 160
 
 
     def __init__(self, tenant_type, room_name, display_message):
@@ -24,7 +25,7 @@ class CameraView:
         bg_image = pygame.image.load(f'./graphics/rooms/{room_name}.png').convert_alpha() 
         self.background = bg_image
 
-        self.offset = (500,100)
+        self.offset = (175,70)
 
         self.cop = None
 
@@ -39,7 +40,6 @@ class CameraView:
     def illegal_cooldown(self):
         now = pygame.time.get_ticks()
         if self.is_illegal and  now - self.illegal_start_time >= self.illegal_cooldown_time:
-            # self.setImage(self.img_idle)        
             self.is_illegal = False
             self.status = 'normal'
             self.visitors = []
@@ -81,7 +81,7 @@ class CameraView:
 
     def addCop(self):
         self.status = 'cop'
-        self.cop = Cop('police1', self)
+        self.cop = Cop(self)
         self.visitors = []
 
 
@@ -127,8 +127,12 @@ class CameraView:
             for visitor in self.visitors:
                 visitor.update()
 
+            if self.tenant.rect.x > 800:
+                self.tenant = None
+                self.cop = None
+
         if self.cop != None:
-            self.cop.update()
+            self.cop.update()    
 
         if self.status == 'cop' and self.cop == None:
 
@@ -141,3 +145,5 @@ class CameraView:
             self.tenant = Tenant(name, (self.TENANT_STARTX, self.TENANT_STARTY))
             self.status = 'normal'
             self.is_illegal = False
+
+        self.illegal_cooldown()

@@ -10,7 +10,7 @@ class SelectableOptionsScreenState(State):
     def __init__(self, game, has_themed_box = False):
         super().__init__(game)
 
-        self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE * SCALE_FACTOR)
+        self.font = pygame.font.Font(UI_FONT, int(UI_FONT_SIZE * SCALE_FACTOR))
 
         # Selection system
         self.selection_cooldown_time = 300
