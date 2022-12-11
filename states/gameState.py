@@ -116,22 +116,34 @@ class GameState(State):
         if now - self.game.last_hour_change_time > HOUR_LENGTH:
             self.game.time_of_day += 1
             self.game.last_hour_change_time = now
+    
+            cams = []
+            for c in self.cameras:
+                if c.tenant != None and c.status != 'cop':
+                    cams.append(c)
+            cameraview = choice(cams)
+            law = choice(self.game.current_laws)
 
-            # 90% probability of infraction each hour
-            if random() < INFRACTION_PROBABILITY:
-                
-                cams = []
-                for c in self.cameras:
-                    if c.tenant != None and c.status != 'cop':
-                        cams.append(c)
+            # add infraction
+            cameraview.setBehavior(law_code=law.code, is_illegal= True)
+            print(f'ILLEGAL - {law.description} - {cameraview.tenant.name}')
 
-                law = choice(self.game.current_laws)
-                cameraview = choice(cams)
-                time_of_infraction = randint(0, HOUR_LENGTH)
+            # add innocent behavior
+            cams = []
+            for c in self.cameras:
+                if c.tenant != None and c.status != 'cop' and not c.is_illegal:
+                    cams.append(c)
+            cameraview = choice(cams)
+            laws = []
+            for l in self.game.all_laws:
+                if l.code not in [x.code for x in self.game.current_laws]:
+                    laws.append(l)
+            law = choice(laws)
+            cameraview.setBehavior(law_code=law.code, is_illegal= False)
+            print(f'INNOCENT - {law.description} - {cameraview.tenant.name}')
 
-                cameraview.setBadBehavior(law.code, time_of_infraction)
 
-                print(f'{law.description} - {cameraview.tenant.name}')
+
 
 
     def check_endOfDay(self):
@@ -218,6 +230,11 @@ class GameState(State):
     def playerMove(self, direction):
         if self.player.canMove:
             self.player.rect.x += direction * PLAYER_SPEED
+
+            if self.player.rect.x < 0:
+                self.player.rect.x = 0
+            elif self.player.rect.right > self.display_surface.get_width():
+                self.player.rect.right = self.display_surface.get_width()
 
 
     def update_cameras_views(self):

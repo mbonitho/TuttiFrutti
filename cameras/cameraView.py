@@ -34,24 +34,24 @@ class CameraView:
 
         # infractions
         self.is_illegal = False
-        self.illegal_cooldown_time = BAD_BEHAVIOR_DURATION
-        self.illegal_start_time = pygame.time.get_ticks() - self.illegal_cooldown_time * 2
+        self.behavior_cooldown_time = BEHAVIOR_DURATION
+        self.behavior_start_time = pygame.time.get_ticks() - self.behavior_cooldown_time * 2
 
         self.status = 'normal'
 
 
-    def illegal_cooldown(self):
+    def behavior_cooldown(self):
         now = pygame.time.get_ticks()
-        if not self.status == 'cop' and self.is_illegal and  now - self.illegal_start_time >= self.illegal_cooldown_time:
+        if self.is_illegal and  now - self.behavior_start_time >= self.behavior_cooldown_time:
             self.is_illegal = False
             self.status = 'normal'
             self.visitors = []
 
 
-    def setBadBehavior(self, law_code, time):
+    def setBehavior(self, law_code: int, is_illegal: bool):
 
-        self.illegal_start_time = pygame.time.get_ticks() 
-        self.is_illegal = True
+        self.behavior_start_time = pygame.time.get_ticks() 
+        self.is_illegal = is_illegal
 
         if law_code == LAW_NO_MUSIC:
             self.status = 'singing'
@@ -89,7 +89,7 @@ class CameraView:
         self.status = 'cop'
         self.cop = Cop(self)
         self.visitors = []
-
+        self.behavior_start_time = pygame.time.get_ticks() + 10000
 
     def draw(self):
         # draw background
@@ -153,4 +153,4 @@ class CameraView:
             self.status = 'normal'
             self.is_illegal = False
 
-        self.illegal_cooldown()
+        self.behavior_cooldown()

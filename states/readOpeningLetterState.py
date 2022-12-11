@@ -24,7 +24,7 @@ class ReadOpeningLetterState(State):
         # text
         self.lines = [
             "Piff,",
-            ""
+            "",
             "Le comité de quartier vous a désigné comme ",
             "nouveau bienveillant observateur de l’immeuble.",
             "Pendant 5 jours, vous devrez appliquer",
