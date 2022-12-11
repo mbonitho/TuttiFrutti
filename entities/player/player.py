@@ -40,7 +40,6 @@ class Player(Entity):
             self.setImage(self.img_activated)  
             self.activated_time = pygame.time.get_ticks() 
             self.idle = False
-        print(self.rect.x)
 
 
     def update(self):

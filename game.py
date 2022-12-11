@@ -16,6 +16,8 @@ class Game:
         pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode((WIDTH * SCALE_FACTOR, HEIGHT * SCALE_FACTOR)) #, pygame.FULLSCREEN|pygame.SCALED)
         pygame.display.set_caption('Tutti Frutti')
+        icon = pygame.image.load('./graphics/icon.png')
+        pygame.display.set_icon(icon)
         self.clock = pygame.time.Clock()
 
         # get all laws

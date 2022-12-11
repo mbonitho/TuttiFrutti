@@ -78,8 +78,8 @@ class Tenant(Entity):
            self.direction *= -1
 
         right = 600
-        if self.rect.x > right:
-            self.rect.x = right 
+        if self.rect.right > right:
+            self.rect.right = right 
             self.direction *= -1
 
 
@@ -99,12 +99,20 @@ class Tenant(Entity):
         if self.rotation_angle == 0:
             self.image = self.image_straight
             self.image_music_note = self.image_music_note_straight
+            self.flip()
         if self.rotation_angle == min:
             self.image = self.image_left
-            self.image_music_note = self.image_music_note_right
+            self.flip()
         if self.rotation_angle == max:
+            self.image_music_note = self.image_music_note_right
             self.image = self.image_right
             self.image_music_note = self.image_music_note_left
+            self.flip()
+
+
+    def flip(self):
+        if self.direction[0] < 0:
+            self.image = pygame.transform.flip(self.image, flip_x= True, flip_y= False)
 
 
     def update(self):
@@ -112,4 +120,5 @@ class Tenant(Entity):
         self.move(self.speed)
         self.check_turn_around()
         self.change_rotation()
+
         
