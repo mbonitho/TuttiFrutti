@@ -80,7 +80,7 @@ class GameState(State):
 
             room = choice(rooms)
             rooms.remove(room)
-            cv = CameraView(tenant,room, self.get_arrestation_consequences)
+            cv = CameraView(tenant,room, self.get_arrestation_consequences, self.add_score_missed)
             self.cameras.append(cv)
 
 
@@ -200,15 +200,22 @@ class GameState(State):
                     self.activation_time = pygame.time.get_ticks()
 
 
+    def add_score_missed(self):
+        self.game.score_counters[self.game.day_number].missed += 1
+
+
+
     def get_arrestation_consequences(self, is_illegal):
         msg = ''
         if is_illegal:
             msg = 'Beau travail, camarade.'
+            self.game.score_counters[self.game.day_number].good += 1
             self.game.player_info.current_income += GOOD_ARREST_BONUS
             pygame.mixer.Sound.play(self.good_arrest_sfx)
             pygame.mixer.music.stop()
         else:
             msg = 'Vous avez fait arrêter un innocent...'
+            self.game.score_counters[self.game.day_number].bad += 1
             self.game.player_info.current_income -= BAD_ARREST_PENALTY
             pygame.mixer.Sound.play(self.bad_arrest_sfx)
             pygame.mixer.music.stop()

@@ -12,9 +12,10 @@ class CameraView:
     TENANT_STARTX = 200
     TENANT_STARTY = 160
 
-    def __init__(self, tenant_type, room_name, consequences):
+    def __init__(self, tenant_type, room_name, consequences, add_score_missed):
         
         self.get_arrestation_consequences = consequences
+        self.add_score_missed = add_score_missed
 
         self.display_surface = pygame.display.get_surface()
 
@@ -46,6 +47,7 @@ class CameraView:
             self.is_illegal = False
             self.status = 'normal'
             self.visitors = []
+            self.add_score_missed()
 
 
     def setBehavior(self, law_code: int, is_illegal: bool):

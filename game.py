@@ -1,9 +1,11 @@
 import pygame, sys
 from settings import *
 from entities.player.playerInfo import PlayerInfo
+from states.endGameRecapState import EndGameRecapState
 from states.menus.titleState import TitleState
 from states.splashState import SplashState
 from states.text.textBoxState import TextBoxState
+from statistics.scoreCounter import ScoreCounter
 from utils.stack import TimedStack
 from laws.law import Law
 from random import choice
@@ -40,6 +42,9 @@ class Game:
         self.endgame_loss_sfx = pygame.mixer.Sound("./sound/sfx/endgame_loss.wav")
         self.endgame_success_sfx = pygame.mixer.Sound("./sound/sfx/endgame_success.wav")
 
+        # score counters
+        self.score_counters = {}
+
 
     def resetGame(self):
         self.day_number = 0
@@ -62,15 +67,17 @@ class Game:
             nb = 2
         else:
             nb = 3
-
         self.modifyLaws(nb)
 
+        sc = ScoreCounter()
+        self.score_counters[self.day_number] = sc
 
     def triggerEndGame(self):
         pygame.mixer.Sound.play(self.endgame_success_sfx)
         pygame.mixer.music.stop()
         st1 = TitleState(self)
-        self.states.force_push(TextBoxState(self, f'Félicitations! Votre semaine de travail est terminée. Voici votre salaire : {self.player_info.total_income}$', [st1])) 
+        st2 = EndGameRecapState(self)
+        self.states.force_push(TextBoxState(self, f'Félicitations! Votre semaine de travail est terminée.', [st1, st2])) 
         self.resetGame()
 
 
@@ -80,6 +87,7 @@ class Game:
         st1 = TitleState(self)
         self.states.force_push(TextBoxState(self, f'Vous avez déshonnoré Blédor, notre leader suprême. Lorsque vous sortirez du camp de réinsertion sociale, essayez de garder votre emploi plus de {self.day_number} jours!', [st1])) 
         self.resetGame()
+        # st1.playMusic()
 
 
     def current_state(self):
