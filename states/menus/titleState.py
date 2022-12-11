@@ -47,7 +47,7 @@ class TitleState(SelectableOptionsScreenState):
         super().draw()
 
         # title text
-        title_txt_surface = self.font.render('TUTTI FRUTTI', False, TEXT_COLOR)
+        title_txt_surface = self.font.render('TUTTI FRUTTI', True, TEXT_COLOR)
         title_rect = title_txt_surface.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0,HEIGHT * .25))
         self.display_surface.blit(title_txt_surface, title_rect)
     

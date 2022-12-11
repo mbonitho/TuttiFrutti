@@ -1,7 +1,7 @@
 FPS = 60
 
 # UI
-UI_FONT = './graphics/fonts/LiberationMono-Bold.ttf'
+UI_FONT = './graphics/fonts/UbuntuMono-B.ttf'
 UI_FONT_SIZE = 42
 TEXT_COLOR = '#EEEEEE'
 UI_BG_COLOR = '#222222'

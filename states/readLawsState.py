@@ -45,13 +45,13 @@ class ReadLawsState(State):
         y = 0
         for index, law in enumerate(self.game.current_laws): 
 
-            txt_law_name_surface = self.law_name_font.render(law.name, False, LAW_SHEET_TEXT_COLOR)
+            txt_law_name_surface = self.law_name_font.render(law.name, True, LAW_SHEET_TEXT_COLOR)
             law_name_rect = txt_law_name_surface.get_rect(topleft = self.rect.topleft + pygame.math.Vector2(0, y))
             self.display_surface.blit(txt_law_name_surface, law_name_rect)
             y += self.law_name_font_size * 1.1 * SCALE_FACTOR
 
 
-            txt_law_desc_surface = self.law_desc_font.render(law.description, False, LAW_SHEET_TEXT_COLOR)
+            txt_law_desc_surface = self.law_desc_font.render(law.description, True, LAW_SHEET_TEXT_COLOR)
             law_desc_rect = txt_law_desc_surface.get_rect(topleft = self.rect.topleft + pygame.math.Vector2(0, y))
             self.display_surface.blit(txt_law_desc_surface, law_desc_rect)
             y += self.law_desc_font_size * 1.1 * SCALE_FACTOR

@@ -255,7 +255,7 @@ class GameState(State):
         self.display_surface.blit(self.btn_switch_cam, (450,520))
 
         # display cam number
-        cam_no_text_surface = font.render(f'#{self.camera_index+1}', False, CAM_NO_TEXT_COLOR)
+        cam_no_text_surface = font.render(f'#{self.camera_index+1}', True, CAM_NO_TEXT_COLOR)
         cam_no_text_rect = cam_no_text_surface.get_rect(topright=(250, 80))
         self.display_surface.blit(cam_no_text_surface, cam_no_text_rect)
 
@@ -267,7 +267,7 @@ class GameState(State):
         self.display_surface.blit(self.img_time_cursor , self.rect_time_cursor)
 
         # draw income
-        income_text_surface = font.render(f'Jour {self.game.day_number} | {self.game.player_info.current_income}$', False, TEXT_COLOR)
+        income_text_surface = font.render(f'Jour {self.game.day_number} | {self.game.player_info.current_income}$', True, TEXT_COLOR)
         income_text_rect = income_text_surface.get_rect(bottomright=(self.display_surface.get_width() - UI_FONT_SIZE * SCALE_FACTOR * 0.25, self.display_surface.get_height() - UI_FONT_SIZE * SCALE_FACTOR * 0.25))
         income_box_rect = pygame.rect.Rect(income_text_rect.inflate(UI_FONT_SIZE * SCALE_FACTOR * 0.25, 0))
         income_box_rect.midtop = income_text_rect.midtop

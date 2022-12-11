@@ -102,7 +102,7 @@ class TextBoxState(State):
         self.boxRect.draw()
 
         text_to_render = self.lines[self.current_line_index][0:int(self.current_letter_index)]
-        txt_surface = self.font.render(text_to_render, False, TEXT_COLOR)
+        txt_surface = self.font.render(text_to_render, True, TEXT_COLOR)
         rect = txt_surface.get_rect(midtop = self.boxRect.rect.midtop + pygame.math.Vector2(0, UI_FONT_SIZE * .25))
         self.display_surface.blit(txt_surface, rect)
 

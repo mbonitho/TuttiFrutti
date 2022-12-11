@@ -63,7 +63,7 @@ class ReadOpeningLetterState(State):
         y = 0
         for _, line in enumerate(self.lines): 
 
-            txt_law_desc_surface = self.font.render(line, False, LAW_SHEET_TEXT_COLOR)
+            txt_law_desc_surface = self.font.render(line, True, LAW_SHEET_TEXT_COLOR)
             law_desc_rect = txt_law_desc_surface.get_rect(topleft = self.rect.topleft + pygame.math.Vector2(self.font_size * 0.8 * SCALE_FACTOR, y))
             self.display_surface.blit(txt_law_desc_surface, law_desc_rect)
             y += self.font_size  * SCALE_FACTOR

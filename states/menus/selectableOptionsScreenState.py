@@ -105,7 +105,7 @@ class SelectableOptionsScreenState(State):
             
         # options
         for index, opt in enumerate(self.options.keys()):
-            txt_surface = self.font.render(opt, False, TEXT_COLOR)
+            txt_surface = self.font.render(opt, True, TEXT_COLOR)
             rect = txt_surface.get_rect(midtop = (self.display_surface.get_width() / 2, HEIGHT * 0.6) + pygame.math.Vector2(0, index * UI_FONT_SIZE * SCALE_FACTOR))
             self.display_surface.blit(txt_surface, rect)
             if self.selection_index == index:
@@ -123,7 +123,7 @@ class SelectableOptionsScreenState(State):
     def getMaxTextWidth(self):
         max = 0
         for text in self.options.keys():
-            txt_surface = self.font.render(text, False, TEXT_COLOR)
+            txt_surface = self.font.render(text, True, TEXT_COLOR)
             rect = txt_surface.get_rect()
             if rect.width > max:
                 max = rect.width
