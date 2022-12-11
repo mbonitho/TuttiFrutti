@@ -130,7 +130,6 @@ class GameState(State):
 
             # add infraction
             cameraview.setBehavior(law_code=law.code, is_illegal= True)
-            print(f'ILLEGAL - {law.description} - {cameraview.tenant.name}')
 
             # add innocent behavior
             cams = []
@@ -144,7 +143,6 @@ class GameState(State):
                     laws.append(l)
             law = choice(laws)
             cameraview.setBehavior(law_code=law.code, is_illegal= False)
-            print(f'INNOCENT - {law.description} - {cameraview.tenant.name}')
 
 
     def check_endOfDay(self):
