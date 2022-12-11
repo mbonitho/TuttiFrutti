@@ -23,6 +23,10 @@ class CameraView:
 
         bg_image = pygame.image.load(f'./graphics/rooms/{room_name}.png').convert_alpha() 
         self.background = bg_image
+        self.curtains_open_image = pygame.image.load(f'./graphics/rooms/rideaux_ouverts.png').convert_alpha() 
+        self.curtains_open_rect = self.curtains_open_image.get_rect(topleft= (180,0)) 
+        self.curtains_closed_image = pygame.image.load(f'./graphics/rooms/rideaux_fermes.png').convert_alpha() 
+        self.curtains_closed_rect = self.curtains_open_image.get_rect(topleft= (100,0)) 
 
         self.offset = (175,70)
 
@@ -99,9 +103,11 @@ class CameraView:
         if self.tenant != None:
             self.display_surface.blit(self.tenant.image, (self.tenant.rect.x + self.offset[0], self.tenant.rect.y + self.offset[1]))
 
-        # opened window
+        # closed curtains
         if self.status == 'closed_curtains':
-            pygame.draw.rect(self.display_surface, 'blue', self.background.get_rect().inflate(-50,-50))
+            self.display_surface.blit(self.curtains_closed_image, (self.curtains_closed_rect.x + self.offset[0], self.curtains_closed_rect.y + self.offset[1]))
+        else:
+            self.display_surface.blit(self.curtains_open_image, (self.curtains_open_rect.x + self.offset[0], self.curtains_open_rect.y + self.offset[1]))
 
         # music if necessary
         if self.status == 'singing':

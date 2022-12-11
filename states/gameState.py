@@ -137,8 +137,8 @@ class GameState(State):
     def check_endOfDay(self):
         if self.game.time_of_day == 12:
             self.game.increment_day()
-            if self.day_number <= NUMBER_OF_DAYS:
-                self.states.force_push(TextBoxState(self, f'JOUR {self.day_number}')) 
+            if self.game.day_number <= NUMBER_OF_DAYS:
+                self.game.states.force_push(TextBoxState(self.game, f'JOUR {self.game.day_number}')) 
 
 
     def check_endOfGame(self):
