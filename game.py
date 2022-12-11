@@ -102,10 +102,11 @@ class Game:
         laws = []
         laws.append(Law(code=LAW_LIGHTS_ALWAYS_ON, name='Éveil', description='La lumière doit rester allumée.'))
         laws.append(Law(code=LAW_NO_MUSIC, name='Paix du silence', description='La musique et le bruit sont interdits.'))
-        laws.append(Law(code=LAW_NO_OPENED_WINDOW, name='Respect mutuel', description='Les fenêtres doivent rester fermées.'))
+        laws.append(Law(code=LAW_NO_OPENED_CURTAINS, name='Innocence', description='Les rideaux doivent rester ouverts.'))
         laws.append(Law(code=LAW_NO_VISIT_OTHER_SPECIES, name='Uniformité', description='Les visites des autres sortes de fruits sont interdites.'))
         laws.append(Law(code=LAW_NO_VISIT_SAME_SPECIES, name='Divergence', description='Les visites de la même sorte de fruits sont interdites.'))
         laws.append(Law(code=LAW_DONT_STOP_MOVING, name='Volontaire', description='Il est interdit de s\'immobiliser'))
+        laws.append(Law(code=NO_MULTIPLE_VISITORS, name='Indépendance', description='Il est interdit d\'avoir plus d\'un visiteur.'))
         return laws
 
 

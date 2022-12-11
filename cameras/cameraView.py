@@ -12,10 +12,9 @@ class CameraView:
     TENANT_STARTX = 200
     TENANT_STARTY = 160
 
-
-    def __init__(self, tenant_type, room_name, display_message):
+    def __init__(self, tenant_type, room_name, consequences):
         
-        self.get_arrestation_consequences = display_message
+        self.get_arrestation_consequences = consequences
 
         self.display_surface = pygame.display.get_surface()
 
@@ -39,7 +38,7 @@ class CameraView:
 
     def illegal_cooldown(self):
         now = pygame.time.get_ticks()
-        if self.is_illegal and  now - self.illegal_start_time >= self.illegal_cooldown_time:
+        if not self.status == 'cop' and self.is_illegal and  now - self.illegal_start_time >= self.illegal_cooldown_time:
             self.is_illegal = False
             self.status = 'normal'
             self.visitors = []
@@ -52,8 +51,8 @@ class CameraView:
 
         if law_code == LAW_NO_MUSIC:
             self.status = 'singing'
-        elif law_code == LAW_NO_OPENED_WINDOW:
-            self.status = 'openedWindow'
+        elif law_code == LAW_NO_OPENED_CURTAINS:
+            self.status = 'closed_curtains'
         elif law_code == LAW_LIGHTS_ALWAYS_ON:
             self.status = 'lights_off'
         elif law_code == LAW_DONT_STOP_MOVING:
@@ -62,6 +61,9 @@ class CameraView:
             self.addVisitorDifferentSpecies()
         elif law_code == LAW_NO_VISIT_SAME_SPECIES:
             self.addVisitorSameSpecies()
+        elif law_code == NO_MULTIPLE_VISITORS:
+            for _ in range(randint(2,3)):
+                self.addVisitorDifferentSpecies()
 
 
     def addVisitorSameSpecies(self):
@@ -98,7 +100,7 @@ class CameraView:
             self.display_surface.blit(self.tenant.image, (self.tenant.rect.x + self.offset[0], self.tenant.rect.y + self.offset[1]))
 
         # opened window
-        if self.status == 'openedWindow':
+        if self.status == 'closed_curtains':
             pygame.draw.rect(self.display_surface, 'blue', self.background.get_rect().inflate(-50,-50))
 
         # music if necessary
@@ -136,12 +138,11 @@ class CameraView:
 
         if self.status == 'cop' and self.cop == None:
 
-            # new tenant
-            name = choice(CameraView.tenant_types)
-
             # reward or penalize
             self.get_arrestation_consequences(self.is_illegal)
 
+            # new tenant
+            name = choice(CameraView.tenant_types)
             self.tenant = Tenant(name, (self.TENANT_STARTX, self.TENANT_STARTY))
             self.status = 'normal'
             self.is_illegal = False

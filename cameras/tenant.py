@@ -43,7 +43,7 @@ class Tenant(Entity):
         self.activated_time = pygame.time.get_ticks() - self.activation_cooldown_time * 2
         self.idle = True
 
-        self.direction = pygame.math.Vector2(choice([-1, 1]), 0)
+        self.direction = pygame.math.Vector2(-1, 0)
         self.speed = 1
 
         self.rotation_direction = 1 # -1, 0, 1
