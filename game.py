@@ -50,7 +50,7 @@ class Game:
         self.player_info.total_income += self.player_info.current_income
         self.player_info.current_income = self.player_info.base_daily_income
 
-        nb = 4 if self.day_number < 5 else 5
+        nb = 2 if self.day_number < 4 else 3
         self.modifyLaws(nb)
 
 
