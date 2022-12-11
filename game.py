@@ -50,20 +50,19 @@ class Game:
         self.player_info.total_income += self.player_info.current_income
         self.player_info.current_income = self.player_info.base_daily_income
 
-        nb = 2 if self.day_number < 2 else self.day_number
+        nb = 2 if self.day_number < 2 else 4
         self.modifyLaws(nb)
 
 
     def triggerEndGame(self):
         st1 = TitleState(self)
-        st1.activation_time = pygame.time.get_ticks() + 5000
         self.states.force_push(TextBoxState(self, f'Félicitations! Votre semaine de travail est terminée. Voici votre salaire : {self.player_info.total_income}$', [st1])) 
         self.resetGame()
 
 
     def triggerGameOver(self):
         st1 = TitleState(self)
-        self.states.force_push(TextBoxState(self, f'Vous avez déshonnoré Blédor, notre leader suprême. Lorsque vous sortirez du camp de réinsertion sociale, essayez de grader votre emploi plus de {self.day_number} jours!', [st1])) 
+        self.states.force_push(TextBoxState(self, f'Vous avez déshonnoré Blédor, notre leader suprême. Lorsque vous sortirez du camp de réinsertion sociale, essayez de garder votre emploi plus de {self.day_number} jours!', [st1])) 
         self.resetGame()
 
 

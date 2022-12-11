@@ -135,7 +135,7 @@ class GameState(State):
 
     def check_gameOver(self):
         if self.game.player_info.current_income <= 0:
-            self.game.triggerEndGame()
+            self.game.triggerGameOver()
 
 
     def activation_cooldown(self):
@@ -149,19 +149,23 @@ class GameState(State):
 
 
     def activatePlayer(self):
-        self.player.activate()
         
         if self.can_activate_selection:
+            self.player.activate()
 
             for location in [POLICE_BUTTON_X, CAM_BUTTON_X, PAPERS_X]:
 
-                if is_near_enough(location, self.player.rect.x, 50):
+                if is_near_enough(location, self.player.rect.x, ACTIVATION_MARGIN):
 
                     if location == CAM_BUTTON_X:
                         self.switch_cameras()
 
                     elif location == POLICE_BUTTON_X:
                         self.call_police()
+                        if self.player.rect.x < POLICE_BUTTON_X:
+                            self.player.rect.x = POLICE_BUTTON_X - ACTIVATION_MARGIN - 1
+                        else:
+                            self.player.rect.x = POLICE_BUTTON_X + ACTIVATION_MARGIN + 1
 
                     elif location == PAPERS_X:
                         self.look_at_laws()
@@ -178,12 +182,7 @@ class GameState(State):
         else:
             msg = 'Vous avez fait arrêter un innocent...'
             self.game.player_info.current_income -= BAD_ARREST_PENALTY
-
         self.game.states.push(TextBoxState(self.game, msg))
-        self.can_activate_selection = False
-        self.activation_time = pygame.time.get_ticks() + 2000
-        self.can_call_cops = False
-        self.cops_call_time = pygame.time.get_ticks() + 2000
 
 
     def switch_cameras(self):

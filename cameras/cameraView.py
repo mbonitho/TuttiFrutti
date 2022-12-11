@@ -74,8 +74,8 @@ class CameraView:
         candidates = CameraView.tenant_types.copy()
         candidates.remove(self.tenant.name)
         name = choice(candidates)
-
-        visitor = Tenant(name, (randint(self.tenant.rect.x - 50, randint(self.tenant.rect.x + 50), self.tenant.rect.y)))
+        x = randint(self.tenant.rect.x - 50, self.tenant.rect.x + 50)
+        visitor = Tenant(name, (x, self.tenant.rect.y))
         self.visitors.append(visitor)
 
 

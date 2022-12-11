@@ -78,6 +78,8 @@ class TextBoxState(State):
             else:
                 self.game.states.pop()
                 for state in self.next_states:
+                    state.activation_time = pygame.time.get_ticks() + 1000
+                    state.can_activate_selection = False
                     self.game.states.force_push(state)
 
 
