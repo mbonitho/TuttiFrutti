@@ -27,7 +27,7 @@ class AboutState(State):
             "",
             "Utilisez les flèches pour vous déplacer à droite ou à gauche.",
             "Utilisez la touche espace pour activer les éléments du bureau.",
-            "",
+            "La feuille sur le bureau indique les lois en vigueur.",
             "",
             "",
             "2022, Mathieu Bonithon & Josianne de Champlain",

@@ -2,6 +2,7 @@ import pygame, sys
 from settings import *
 from entities.player.playerInfo import PlayerInfo
 from states.menus.titleState import TitleState
+from states.splashState import SplashState
 from states.text.textBoxState import TextBoxState
 from utils.stack import TimedStack
 from laws.law import Law
@@ -28,6 +29,7 @@ class Game:
 
         self.states = TimedStack()
         self.states.push(TitleState(self))
+        self.states.force_push(SplashState(self))
 
         self.day_number = 0
         self.current_laws = []
@@ -50,7 +52,13 @@ class Game:
         self.player_info.total_income += self.player_info.current_income
         self.player_info.current_income = self.player_info.base_daily_income
 
-        nb = 2 if self.day_number < 4 else 3
+        if self.day_number == 1:
+            nb = 1
+        elif self.day_number < 4:
+            nb = 2
+        else:
+            nb = 3
+
         self.modifyLaws(nb)
 
 

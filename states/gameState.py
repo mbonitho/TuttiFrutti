@@ -107,7 +107,7 @@ class GameState(State):
 
         # place cursor at right position
         total = self.time_gauge_rect.height
-        hourly_increment = total / 12
+        hourly_increment = total / HOURS_IN_DAY
         self.rect_time_cursor.y = self.time_gauge_rect.bottom - (hourly_increment * (self.game.time_of_day + 1))
 
 
@@ -147,7 +147,7 @@ class GameState(State):
 
 
     def check_endOfDay(self):
-        if self.game.time_of_day == 12:
+        if self.game.time_of_day == HOURS_IN_DAY:
             self.game.increment_day()
             if self.game.day_number <= NUMBER_OF_DAYS:
                 self.game.states.force_push(TextBoxState(self.game, f'JOUR {self.game.day_number}')) 
