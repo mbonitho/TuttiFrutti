@@ -111,7 +111,7 @@ class CameraView:
 
         # lights off if necessary
         if self.status == 'lights_off':
-            pygame.draw.rect(self.display_surface, 'black', self.background.get_rect())
+            pygame.draw.rect(self.display_surface, 'black', self.background.get_rect(topleft=self.offset))
 
 
     def update(self):
