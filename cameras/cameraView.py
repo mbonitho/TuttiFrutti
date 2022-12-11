@@ -42,7 +42,7 @@ class CameraView:
 
     def behavior_cooldown(self):
         now = pygame.time.get_ticks()
-        if self.is_illegal and  now - self.behavior_start_time >= self.behavior_cooldown_time:
+        if not self.status == 'cop' and self.is_illegal and  now - self.behavior_start_time >= self.behavior_cooldown_time:
             self.is_illegal = False
             self.status = 'normal'
             self.visitors = []
@@ -89,7 +89,7 @@ class CameraView:
         self.status = 'cop'
         self.cop = Cop(self)
         self.visitors = []
-        self.behavior_start_time = pygame.time.get_ticks() + 10000
+
 
     def draw(self):
         # draw background
