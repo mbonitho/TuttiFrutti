@@ -17,7 +17,7 @@ class TitleState(SelectableOptionsScreenState):
 
         # Menu Options
         self.options = {'Nouveau jeu' : self.newGame, 
-                        'Aide et à propos' : self.openAbout,
+                        'À propos' : self.openAbout,
                         'Quitter' : self.close}
 
 
