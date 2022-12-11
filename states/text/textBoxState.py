@@ -96,9 +96,9 @@ class TextBoxState(State):
 
 
     def draw(self):
-        self.game.states.element_before(self).draw() 
+        if self.game.states.element_before(self) != None:
+            self.game.states.element_before(self).draw()
         
-
         self.boxRect.draw()
 
         text_to_render = self.lines[self.current_line_index][0:int(self.current_letter_index)]

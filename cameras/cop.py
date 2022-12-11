@@ -19,7 +19,7 @@ class Cop(Entity):
         self.image_right = pygame.transform.scale(image_right, (int(rect_right.width * SCALE_FACTOR), int(rect_right.height * SCALE_FACTOR)))
 
         self.image = self.image_straight
-        self.rect = self.image.get_rect(topleft = (600,cameraView.tenant.rect.y))
+        self.rect = self.image.get_rect(topleft = (600, cameraView.tenant.rect.y - 80))
 
         # tenant
         self.cameraView = cameraView

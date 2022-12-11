@@ -46,9 +46,7 @@ class Game:
     def increment_day(self):
         self.day_number += 1
         self.time_of_day = 0
-        self.last_hour_change_time = pygame.time.get_ticks()
-        if self.day_number <= NUMBER_OF_DAYS:
-            self.states.force_push(TextBoxState(self, f'JOUR {self.day_number}'))   
+        self.last_hour_change_time = pygame.time.get_ticks()  
         self.player_info.total_income += self.player_info.current_income
         self.player_info.current_income = self.player_info.base_daily_income
 
