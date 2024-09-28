@@ -1,3 +1,4 @@
+import asyncio
 import pygame, sys
 from settings import *
 from entities.player.playerInfo import PlayerInfo
@@ -94,7 +95,7 @@ class Game:
         return self.states.peek()
 
 
-    def run(self):
+    async def run(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -113,6 +114,7 @@ class Game:
 
             pygame.display.update()
             self.clock.tick(FPS)
+            await asyncio.sleep(0)
 
 
     def return_to_title(self):
